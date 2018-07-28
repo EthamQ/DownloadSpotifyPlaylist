@@ -1,0 +1,7 @@
+got the code from 
+
+https://github.com/ytb2mp3/youtube-mp3-downloader
+
+and just modified it a bit
+
+but if i have time i might write a downloader by myself
