@@ -1,6 +1,9 @@
 var Downloader = require("./git-project/example/downloader");
 let dl = new Downloader();
 
+/**
+ * download
+ */
 downloadSong = function(videoId, outputName) {
     dl.getMP3({videoId: videoId, name: outputName}, function(err,res){
         if(err)
