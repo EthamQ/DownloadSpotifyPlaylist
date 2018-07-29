@@ -10,6 +10,7 @@ downloadSong = function(videoId, outputName) {
             throw err;
         else{
             let fileJSON = res;
+            
             let filePath = res.file;
             console.log("Song was downloaded: " + filePath);
         }
