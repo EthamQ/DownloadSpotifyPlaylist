@@ -17,14 +17,25 @@ router.get('/user', function(req, res, next) {
   spotify.getUser();
 });
 
+router.get('/second', function(req, res, next) {
+  console.log(req.url);
+});
+
 router.get('/login', function(req, res) {
-  var scopes = 'user-read-private user-read-email';
+  let scopes = 'user-read-private user-read-email';
+  let scopeParam = '&scope=' + encodeURIComponent(scopes);
+  let authUrl = 'https://accounts.spotify.com/authorize';
+  let resTypeParam = '?response_type=code';
+  let idParam = '&client_id=' + "261fe497b68c48208a70d165648d21ea";
+  let redirParam = '&redirect_uri=' + encodeURIComponent("http://localhost:3000");
+  let url = authUrl + resTypeParam + idParam + scopeParam + redirParam;
   res.redirect('https://accounts.spotify.com/authorize' +
     '?response_type=code' +
     '&client_id=' + "261fe497b68c48208a70d165648d21ea" +
     (scopes ? '&scope=' + encodeURIComponent(scopes) : '') +
     '&redirect_uri=' + encodeURIComponent("http://localhost:3000"));
     console.log("login");
+
   });
 
 
