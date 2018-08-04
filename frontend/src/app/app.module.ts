@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { SpotifyComponent } from './spotify/spotify.component';
@@ -11,10 +12,11 @@ const appRoutes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
-    SpotifyComponent
+    SpotifyComponent,
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     RouterModule.forRoot(
       appRoutes,
       // { enableTracing: true } // <-- debugging purposes only
