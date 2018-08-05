@@ -21,7 +21,7 @@ router.get('/download/:id', function (req, res, next) {
   download.downloadSong(req.params.id, "pp.mp3");
 });
 
-router.post('/spotify/authorize', spotify.getToken);
+router.post('/spotify/authorize', spotify.codeTokenExchange);
 
 router.get('/a', function (req, res, next) {
   let details = {
