@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SpotifyService } from '../services/spotify.service';
+import { ConstantService } from '../services/constant.service';
 
 @Component({
   selector: 'app-spotify',
@@ -8,18 +9,17 @@ import { SpotifyService } from '../services/spotify.service';
 })
 export class SpotifyComponent implements OnInit {
 
-  constructor(private spotifyService: SpotifyService) { }
+  constructor(private spotifyService: SpotifyService, private constantService: ConstantService) { }
 
   ngOnInit() {
-    if (this.spotifyService.codeExists()) {
-      this.spotifyService.proceedAuthentication();
-    } else{
-      this.spotifyService.login();
-    }
+    this.spotifyService.testAuthentication();
+    this.spotifyService.authenticated.subscribe(authenticated => {
+      if (authenticated === this.constantService.AUTHENTICATED) {
+        console.log('authenticated');
+      } else if (authenticated === this.constantService.NOT_AUTHENTICATED) {
+        console.log('not authenticated');
+        this.spotifyService.login();
+      }
+    });
   }
-
-  test() {
-    this.spotifyService.login();
-  }
-
 }

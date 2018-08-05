@@ -55,10 +55,12 @@ codeTokenExchange = function(req, res){
     const code = req.body.code;
     getApiTokenResponse(code).then(apiTokenResponse => {
         if(tokenReceived(apiTokenResponse)){
+            res.send({success: true, data: []});
             const tokens = extractTokens(apiTokenResponse);
             sendToken(tokens);
         } else{
             console.log('no token received');
+            res.send({success: false, data: []});
             // console.log(apiTokenResponse);
         }
     });
