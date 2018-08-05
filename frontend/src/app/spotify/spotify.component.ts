@@ -19,7 +19,7 @@ export class SpotifyComponent implements OnInit {
   }
 
   test() {
-    this.spotifyService.getCodeFromUrl();
+    this.spotifyService.login();
   }
 
 }

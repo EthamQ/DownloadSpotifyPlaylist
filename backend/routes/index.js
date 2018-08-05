@@ -1,59 +1,58 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+const fetch = require('node-fetch');
 
 const download = require("./../download-logic/downloadUtils");
 const spotify = require('./../spotify-logic/sp-api-setup');
 
+grant_type = 'authorization_code';
+client_id = '261fe497b68c48208a70d165648d21ea';
+client_secret = '1ff88434fbb8418999eb0e4b9e021316';
+redirect_uri = 'http://localhost:4200';
+code = 'AQA2uyaIHsQ_NAlk2a4NhxRHVe7wCj5V824kGhwWXBSVvIHfMwOUP8_n5cGioZGZJNVqZXdC76AyrcJ1aMt9eDhwvYpu0YB_fIjCxUURUg6dLgUncErZheNtVCjrUxACsc0MKkyD5_Uf030MZEJNJKa_RqEo6f038d21SBI57Wf9B9YXaRYAawoH1RdektK_SYFgkhmPtQmsS0gA8wG4FupMeNNKfa0lODg6ZqWWuA';
+url = 'https://accounts.spotify.com/api/token';
+
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/', function (req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
-router.get('/download/:id', function(req, res, next) {
+router.get('/download/:id', function (req, res, next) {
   download.downloadSong(req.params.id, "pp.mp3");
 });
 
-router.get('/user', function(req, res, next) {
-  spotify.getUser();
+router.post('/spotify/authorize', spotify.getToken);
+
+router.get('/a', function (req, res, next) {
+  let details = {
+    'grant_type': 'authorization_code',
+    'client_id': client_id,
+    'client_secret': client_secret,
+    'redirect_uri': 'http://localhost:4200',
+    'code': code,
+  };
+
+  let formBody = [];
+  for (let property in details) {
+    let encodedKey = encodeURIComponent(property);
+    let encodedValue = encodeURIComponent(details[property]);
+    formBody.push(encodedKey + "=" + encodedValue);
+  }
+  formBody = formBody.join("&");
+  console.log(formBody);
+
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+    },
+    body: formBody
+  }).then(
+    response => response.text() // .json(), etc.
+    // same as function(response) {return response.text();}
+).then(
+    html => console.log(html)
+);
 });
-
-router.get('/second', function(req, res, next) {
-  console.log(req.url);
-});
-
-// app.use(function(req, res, next) {
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-//   next();
-// });
-
-router.get('/login', function(req, res) {
-  
-let url2  = require('url');
-  var url_parts = url2.parse(req.url);
-  console.log(req.url);
-  let scopes = 'user-read-private user-read-email';
-  let scopeParam = '&scope=' + encodeURIComponent(scopes);
-  let authUrl = 'https://accounts.spotify.com/authorize';
-  let resTypeParam = '?response_type=code';
-  let idParam = '&client_id=' + "261fe497b68c48208a70d165648d21ea";
-  let redirParam = '&redirect_uri=' + encodeURIComponent("http://localhost:3000");
-  let url = authUrl + resTypeParam + idParam + scopeParam + redirParam;
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  res.redirect('https://accounts.spotify.com/authorize' +
-    '?response_type=code' +
-    '&client_id=' + "261fe497b68c48208a70d165648d21ea" +
-    (scopes ? '&scope=' + encodeURIComponent(scopes) : '') +
-    '&redirect_uri=' + encodeURIComponent("http://localhost:4200"));
-    
-
-
-
-    
-  });
-
-
-  
 
 module.exports = router;

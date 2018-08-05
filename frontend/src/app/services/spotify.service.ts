@@ -8,8 +8,11 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class SpotifyService {
+  // https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-code-flow
 
   constructor(private http: HttpClient) { }
+
+  apiBaseUrl = 'http://localhost:3000/';
 
   urlCode: string;
   spotifyBaseUrl = 'https://accounts.spotify.com/authorize/';
@@ -33,6 +36,7 @@ export class SpotifyService {
     return authUrl;
   }
 
+  // TODO: error handling
   getCodeFromUrl() {
     //  part after '?' are the params and they are seperated by a '&'
     const params = this.getCurrentUrl().split('?')[1].split('&');
@@ -63,5 +67,7 @@ export class SpotifyService {
 
   proceedAuthentication() {
     console.log(this.getCodeFromUrl());
+    const path = this.apiBaseUrl + 'spotify/authenticate';
+    this.http.post(path, {code: this.getCodeFromUrl()}).subscribe();
   }
 }
